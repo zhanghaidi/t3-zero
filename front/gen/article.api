@@ -1,0 +1,55 @@
+info(
+	title: "article"
+	desc: "文章api"
+	author: "evdo"
+	version: "v1.0"
+)
+
+type (
+	Article {
+		ID          int             `json:"id"`
+		CategoryID  int             `json:"category_id"`
+		Title       string          `json:"title"`
+		Author      string          `json:"author"`
+		UID         int             `json:"uid"`
+		Sort        int             `json:"sort"`
+		Thumb       string          `json:"thumb"`
+		Description string          `json:"description"`
+		Content     string          `json:"content"`
+		Status      int             `json:"status"`
+		IsRecommend int             `json:"is_recommend"`
+		CreateTime  string          `json:"create_time"`
+		Category    ArticleCategory `json:"category"`
+	}
+
+	ArticleCategory {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	}
+
+	CategoryArticlesReq {
+		Page       int `form:"page,optional"`
+		PageSize   int `form:"page_size,optional"`
+		CategoryID int `form:"category_id,optional"`
+	}
+)
+
+@server(
+	group: article
+	prefix: api/v1
+)
+service front-api {
+	
+	@doc(
+		summary: "根据分类获取文章列表"
+	)
+	@handler categoryArticles
+	get /article/categoryArticles (CategoryArticlesReq) returns (PageListReply)
+	
+	@doc(
+		summary: "获取文章详情"
+	)
+	@handler getArticle
+	get /article/articles/:id (IDPathReq) returns (Article)
+	
+}

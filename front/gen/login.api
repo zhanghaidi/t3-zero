@@ -1,0 +1,164 @@
+info(
+	title: "login"
+	desc: "登录相关api"
+	author: "evdo"
+	version: "v1.0"
+)
+
+type (
+	LoginReq {
+		Username string `json:"username"`
+		Password string `json:"password"`
+	}
+
+	LoginReply {
+		Token string `json:"token"`
+	}
+
+	RegisterReq {
+		Mobile   string `json:"mobile"`       // 手机号
+		Password string `json:"password"`     // 密码
+		Code     string `json:"code"`         // 手机号验证码
+		Ref      string `json:"ref,optional"` // 推荐人手机号
+	}
+
+	RegisterReply {
+		ID   uint   `json:"id"`
+		Name string `json:"name"`
+	}
+
+	GetMobileCodeReq {
+		Mobile string `json:"mobile"` // 手机号
+	}
+
+	GetMobileCodeReply {
+		Mobile string `json:"mobile"` // 手机号
+		Code   string `json:"code"`   //
+	}
+
+	ResetPasswordReq {
+		UserName        string `json:"username"`         //手机号
+		Password        string `json:"password"`         //密码
+		Code            string `json:"code"`             //手机号验证码
+		ConfirmPassword string `json:"confirm_password"` //重复密码
+	}
+
+	ResetPasswordReply {
+		UserName string `json:"username"` //手机号
+	}
+
+	Auth2qqReq {
+		Code string `json:"code"`
+	}
+
+	Auth2wechatReq {
+		Code string `json:"code"`
+	}
+
+	Auth2appleReq {
+		User     string `json:"user"`
+		Email    string `json:"email"`
+		FullName string `json:"full_name"`
+	}
+
+	Auth2qqReply {
+		IsRegister  bool   `json:"is_register"`
+		Token       string `json:"token"`
+		SocialsType string `json:"socials_type"`
+		Unionid     string `json:"unionid"`
+		Openid      string `json:"openid"`
+		Avatar      string `json:"avatar"`
+		Nickname    string `json:"user"`
+		Sex         uint   `json:"sex"`
+	}
+
+	Auth2wechatReply {
+		IsRegister  bool   `json:"is_register"`
+		Token       string `json:"token"`
+		SocialsType string `json:"socials_type"`
+		Unionid     string `json:"unionid"`
+		Openid      string `json:"openid"`
+		Avatar      string `json:"avatar"`
+		Nickname    string `json:"user"`
+		Sex         uint   `json:"sex"`
+	}
+
+	Auth2appleReply {
+		IsRegister  bool   `json:"is_register"`
+		Token       string `json:"token"`
+		SocialsType string `json:"socials_type"`
+		User        string `json:"user"`
+		Email       string `json:"email"`
+		FullName    string `json:"full_name"`
+	}
+
+	Auth2mobileBindReq {
+		Mobile      string `json:"mobile"`
+		Code        string `json:"code"`
+		SocialsType string `json:"socials_type"`
+		Openid      string `json:"openid"`
+		Unionid     string `json:"unionid"`
+		NickName    string `json:"nick_name,optional"`
+		Avatar      string `json:"avatar,optional"`
+		Sex         uint   `json:"sex,optional"`
+		Email       string `json:"email,optional"`
+	}
+
+	Auth2mobileBindReply {
+		Token string `json:"token"`
+	}
+)
+
+@server(
+	group: login
+	prefix: api/v1
+)
+service front-api {
+	@doc(
+		summary: "登录"
+	)
+	@handler userLogin
+	post /login/login (LoginReq) returns (LoginReply)
+	
+	@doc(
+		summary: "注册"
+	)
+	@handler userRegister
+	post /login/register (RegisterReq) returns (RegisterReply)
+	
+	@doc(
+		summary: "获取手机验证码"
+	)
+	@handler userMobileCode
+	post /login/getMobileCode (GetMobileCodeReq)
+	@doc(
+		summary: "忘记密码"
+	)
+	@handler userResetPwd
+	post /login/passwordReset (ResetPasswordReq) returns (ResetPasswordReply)
+	
+	@doc(
+		summary: "qq第三方登录"
+	)
+	@handler auth2qq
+	post /login/auth2qq (Auth2qqReq) returns (Auth2qqReply)
+	
+	@doc(
+		summary: "微信第三方登录"
+	)
+	@handler auth2wechat
+	post /login/auth2wechat (Auth2wechatReq) returns (Auth2wechatReply)
+	
+	@doc(
+		summary: "苹果第三方登录"
+	)
+	@handler auth2apple
+	post /login/auth2apple (Auth2appleReq) returns (Auth2appleReply)
+	
+	@doc(
+		summary: "第三方登录绑定手机号注册"
+	)
+	@handler auth2mobileBind
+	post /login/auth2mobileBind (Auth2mobileBindReq) returns (Auth2mobileBindReply)
+	
+}

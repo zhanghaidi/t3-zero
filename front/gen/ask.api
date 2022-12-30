@@ -1,0 +1,68 @@
+info(
+	title: "ask"
+	desc: "用户问答"
+	author: "evdo"
+	version: "v1.0"
+)
+
+type (
+	
+	OfficialAsk {
+		ID        uint   `json:"id"`
+		Question  string `json:"question"`
+		Answer    string `json:"answer"`
+		CreatedAt string `json:"created_at"`
+	}
+
+	UserAsk {
+		ID        uint      `json:"id"`
+		ParentID  uint      `json:"parent_id"`
+		Question  string    `json:"question"`
+		IsReply   uint      `json:"is_reply"`
+		Answer    string    `json:"answer"`
+		CreatedAt string    `json:"created_at"`
+		Child     []UserAsk `gorm:"foreignKey:ParentID" json:"child"`
+	}
+
+	UserAskPostReq {
+		ParentID uint   `json:"parent_id"`
+		Question string `json:"question"`
+	}
+
+	UserAskEndReq {
+		ID uint `json:"id"`
+	}
+)
+
+@server(
+	middleware: Auth,CryptionRequest,CryptionResponse
+	group: ask
+	prefix: api/v1
+)
+service front-api {
+	
+	@doc(
+		summary: "获取官方问答"
+	)
+	@handler officialAsks
+	get /ask/officialAsks  returns (SimpleList)
+	
+	@doc(
+		summary: "获取用户问答列表"
+	)
+	@handler userAsks
+	get /ask/userAsks  returns (SimpleList)
+	
+	@doc(
+		summary: "提交用户问答"
+	)
+	@handler userAskPost
+	post /ask/userAskPost(UserAskPostReq)
+	
+	@doc(
+		summary: "关闭用户问答"
+	)
+	@handler userAskEnd
+	post /ask/userAskEnd(UserAskEndReq)
+	
+}

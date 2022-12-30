@@ -1,0 +1,29 @@
+// IDReq 基础id参数请求
+type IDReq {
+	ID uint `json:"id"`
+}
+
+// IDPathReq path类型的id参数请求
+type IDPathReq {
+	ID uint `path:"id"`
+}
+
+// PageReq 列表请求参数
+type PageReq {
+	Page     int `form:"page,default=1"`
+	PageSize int `form:"page_size,default=15"`
+}
+
+// PageListReply 分页数据
+type PageListReply {
+	Total    uint        `json:"total"`
+	Page     int         `json:"page"`
+	PageSize int         `json:"page_size"`
+	LastPage int         `json:"last_page"`
+	List     interface{} `json:"list"`
+}
+
+// SimpleList 列表数据
+type SimpleList {
+	List interface{} `json:"list"`
+}

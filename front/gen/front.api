@@ -1,0 +1,15 @@
+syntax = "v1"
+
+info(
+	title: "前端"
+	desc: "前端API"
+	author: "evdo"
+	email: "evdo@163.com"
+)
+
+import(
+	"base.api"
+	"login.api"
+	"ask.api"
+	"article.api"
+)
